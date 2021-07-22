@@ -1,68 +1,50 @@
-import React, { Component } from 'react';
+import React, { Component, useRef } from 'react';
 import ArticleList from '../components/ArticleList/ArticleList.js'
 import { fetchArticles, searchArticles } from '../api/ArticlesAPI';
 import { InputGroup, Input } from 'reactstrap';
 
-class HomePage extends Component {
-    state = {
-        articles: []
-    };
 
-    async componentDidMount() {
-        try {
-            const articlesJson = await fetchArticles();
-            this.setState({ articles: articlesJson });
-        } catch (e) {
-            console.error('error fetching articles: ', e);
+function HomePage(props) {
+    const [articles, setArticles] = React.useState([]);
+    const [searchText, setSearchText] = React.useState('');
+
+    const prevSearchText = useRef();  // initially 'undefined' so line 17's comparison fails on first run, so we actually load articles initially
+
+    // Using useRef() so that component only re-renders when inputtext is different from previous one, rather than re-rendering w/ an infinite loop
+    React.useEffect(() => {
+        console.log('hi');
+        const fetchArticlesAsync = async () => {
+            if (prevSearchText.current === searchText) return;  // does nothing if prevSearchText is same as current searchText
+
+            prevSearchText.current = searchText;  // updates prevSearchText to the current searchText for the next invocation of useEffect
+            try {
+                if (searchText) {
+                    const searchedJson = await searchArticles(searchText);
+                    setArticles(searchedJson);
+                } else {
+                    const articlesJson = await fetchArticles();
+                    setArticles(articlesJson);
+                };
+            } catch (e) {
+                console.error('Error: ' + e)
+            }
         }
-    }
+        fetchArticlesAsync();
+    }, [articles, searchText]);
 
-    handleSearch = async (event) => {
-        const textToSearchFor = event.target.value;
-        if (textToSearchFor.length === 0) return;
+    const handleSearch = (e) => setSearchText(e.target.value);
 
-        const articlesJSON = await searchArticles(textToSearchFor);
-        this.setState({ articles: articlesJSON })
-    }
-
-    render() {
-        return (
-            <div>
-                <InputGroup>
-                    <Input onChange={(e) => this.handleSearch(e)} type="text" placeholder="Search" />
-                </InputGroup>
-
-                <ArticleList articles={this.state.articles} />
-            </div>
-        );
-    }
+    return (
+        <div>
+            <InputGroup>
+                <Input onChange={(e) => handleSearch(e)} type="text" placeholder="Search" />
+            </InputGroup>
+            <ArticleList articles={articles} />
+        </div>
+    );
 }
+
 
 export default HomePage;
 
 
-// Functional solution:
-// function HomePage(props) {
-//   const [ articles, setArticles ] = React.useState([]);
-
-//   React.useEffect(() => {
-//     const fetchArticlesAsync = async () => {
-//       try {
-//         const articlesJson = await fetchArticles();
-//         setArticles(articlesJson);
-//       } catch (e) {
-//         console.error('error fetching articles: ', e);
-//       }
-//     };
-
-//     if (!articles.length) {
-//       fetchArticlesAsync();
-//     }
-//   }, [articles])
-
-//   return (
-//     <div>
-//       <ArticleList articles={articles} />
-//     </div>
-//   );
-// }
