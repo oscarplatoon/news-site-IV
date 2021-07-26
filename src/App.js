@@ -10,8 +10,8 @@ class App extends Component {
   render() {
     return (
       <div>
-        <AppNav handleNavClick={(clickedItem) => console.log(clickedItem)} />
         <Router>
+        <AppNav handleNavClick={(clickedItem) => console.log(clickedItem)} />
           <div>
             <Route exact path="/" component={HomePage} />
             <Route exact path="/articles/:articleID" component={ArticlePage} />

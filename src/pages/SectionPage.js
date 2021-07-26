@@ -4,24 +4,43 @@ import ArticleList from '../components/ArticleList/ArticleList.js';
 
 class SectionPage extends Component {
   state = {
-    articles: null
+    articles: [],
+    section: "",
   };
 
+  // Life cycles:
   async componentDidMount() {
     try {
-      // console.log('section id is: ', this.props.sectionID)
-      const articlesJson = await ArticlesAPI.fetchArticlesBySection(this.props.match.params.sectionID);
-      this.setState({ articles: articlesJson });
+      const sectionID = this.props.match.params.sectionID
+      this.setState({ section: sectionID})
+      const sectionArticles = await ArticlesAPI.fetchArticlesBySection(sectionID);
+      this.setState({ articles: sectionArticles });
     } catch (e) {
-      console.error('error fetching article: ', e);
+      console.error('error fetching section articles: ', e);
+    }
+  }
+
+  async componentDidUpdate(prevState) {
+    if(prevState.articles !== this.state.articles) {
+      try {
+        const articlesJson = await ArticlesAPI.fetchArticlesBySection(this.props.match.params.sectionID);
+        this.setState({ articles: articlesJson});
+      } catch (e) {
+        console.error('something has gone very wrong: ', e)
+      }
     }
   }
   
   render() {
-    console.log(this.props)
-    console.log(this.state.articles)
     return (
       <div>
+        <h2>
+          {this.state.section ?
+          `${this.state.section} page`
+          : 'NO SECTION.'
+        }
+        </h2>
+        <hr />
         {this.state.articles ? <ArticleList articles={ this.state.articles }/> :
           <span>404: Article Not Found</span>
         }
