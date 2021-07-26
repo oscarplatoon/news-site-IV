@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ArticleList from '../components/ArticleList/ArticleList.js'
-import { fetchArticles } from '../api/ArticlesAPI';
+import ArticlesAPI from '../api/ArticlesAPI';
 
 class HomePage extends Component {
   state = {
@@ -9,7 +9,7 @@ class HomePage extends Component {
 
   async componentDidMount() {
     try {
-      const articlesJson = await fetchArticles();
+      const articlesJson = await ArticlesAPI.fetchArticles();
       this.setState({ articles: articlesJson });
     } catch (e) {
       console.error('error fetching articles: ', e);

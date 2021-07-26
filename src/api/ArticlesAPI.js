@@ -26,7 +26,6 @@ const fetchArticlesBySection = async (section) => {
 };
 
 const fetchArticles = async (filters = null) => {
-  console.log('fetching articles')
   if (filters == null) return await tryFetch(BASE_URL)
 };
 

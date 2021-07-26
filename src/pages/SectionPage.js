@@ -1,25 +1,28 @@
 import React, { Component } from 'react';
-import Article from '../components/Article/Article.js'
 import ArticlesAPI from '../api/ArticlesAPI';
+import ArticleList from '../components/ArticleList/ArticleList.js';
 
-class ArticlePage extends Component {
+class SectionPage extends Component {
   state = {
-    article: null
+    articles: null
   };
 
   async componentDidMount() {
     try {
-      const articleJson = await ArticlesAPI.fetchArticleByID(this.props.match.params.articleID);
-      this.setState({ article: articleJson });
+      // console.log('section id is: ', this.props.sectionID)
+      const articlesJson = await ArticlesAPI.fetchArticlesBySection(this.props.match.params.sectionID);
+      this.setState({ articles: articlesJson });
     } catch (e) {
       console.error('error fetching article: ', e);
     }
   }
-
+  
   render() {
+    console.log(this.props)
+    console.log(this.state.articles)
     return (
       <div>
-        {this.state.article ? <Article {...this.state.article } /> :
+        {this.state.articles ? <ArticleList articles={ this.state.articles }/> :
           <span>404: Article Not Found</span>
         }
       </div>
@@ -27,7 +30,7 @@ class ArticlePage extends Component {
   }
 }
 
-export default ArticlePage;
+export default SectionPage;
 
 
 // Functional solution:
@@ -37,8 +40,8 @@ export default ArticlePage;
 //   React.useEffect(() => {
 //     const fetchArticleAsync = async () => {
 //       try {
-//         const articleJson = await fetchArticleByID(props.match.params.articleID);
-//         setArticle(articleJson);
+//         const articlesJson = await fetchArticleByID(props.match.params.articleID);
+//         setArticle(articlesJson);
 //       } catch (e) {
 //         console.error('error fetching article: ', e);
 //       }
