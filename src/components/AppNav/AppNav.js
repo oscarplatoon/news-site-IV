@@ -8,8 +8,8 @@ class AppNav extends Component {
 
     return (
       <Navbar color="light">
-        {navItems.map((navItem) =>
-          <a href="#" onClick={ () => handleNavClick( navItem.value )} >
+        {navItems.map((navItem, index) =>
+          <a key={index} href="#" onClick={ () => handleNavClick( navItem.value )} >
             { navItem.label } |
           </a>
         )}

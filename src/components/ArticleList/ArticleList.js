@@ -8,7 +8,7 @@ class ArticleList extends Component {
     return (
       <ListGroup>
         { articles.map((article, index) => (
-          <ListGroupItem>
+          <ListGroupItem key={index}>
             <ArticleTeaser { ...article } id={ index + 1 } />
           </ListGroupItem>
         ))}
