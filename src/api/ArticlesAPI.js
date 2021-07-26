@@ -12,8 +12,11 @@ const fetchArticlesBySection = async (section) => {
   return data;
 };
 
-const fetchArticles = async (filters = null) => {
-  const url = filters ? `${BASE_URL}?filter={"where":${filters}}` : BASE_URL;
+const fetchArticles = async (filterTitle = null) => {
+  const filterUrl = filterTitle && filterTitle != "" 
+    ? `?filter={"where":{"title":{ "ilike": "${filterTitle}"}}}`
+    : ""
+  const url = BASE_URL + filterUrl
   const response = await fetch(url);
   const data = await response.json();
   return data;
