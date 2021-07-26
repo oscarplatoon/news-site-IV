@@ -4,16 +4,19 @@ import './App.css';
 import AppNav from './components/AppNav/AppNav.js';
 import HomePage from './pages/HomePage.js';
 import ArticlePage from './pages/ArticlePage.js';
+import SectionPage from './pages/SectionPage.js'
 
 class App extends Component {
   render() {
     return (
       <div>
-        <AppNav handleNavClick={(clickedItem) => console.log(clickedItem)} />
         <Router>
+          <AppNav />
           <div>
             <Route exact path="/" component={HomePage} />
             <Route exact path="/articles/:articleID" component={ArticlePage} />
+            <Route exact path="/sections/:sectionName" component={SectionPage} />
+
           </div>
         </Router>
       </div>
