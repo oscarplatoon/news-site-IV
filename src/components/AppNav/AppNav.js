@@ -1,19 +1,21 @@
 import React, { Component } from 'react';
+import { Router, Link, BrowserRouter } from 'react-router-dom';
 import { Navbar } from 'reactstrap';
 import navItems from '../../config/Sections.json';
 
 class AppNav extends Component {
   render() {
-    const { handleNavClick } = this.props;
 
     return (
-      <Navbar color="light">
-        {navItems.map((navItem, index) =>
-          <a key={index} href="#" onClick={ () => handleNavClick( navItem.value )} >
-            { navItem.label } |
-          </a>
-        )}
-      </Navbar>
+      <BrowserRouter basename='/sections'>
+        <Navbar color="light">
+          {navItems.map((navItem, index) =>
+            <Link to={`/${navItem.label.toLowerCase()}`} key={index}>
+              { navItem.label } |
+            </Link>
+          )}
+        </Navbar>
+      </BrowserRouter>
     )
   }
 }
