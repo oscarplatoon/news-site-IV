@@ -21,16 +21,3 @@ class ArticleTeaser extends Component {
 }
 
 export default ArticleTeaser;
-
-
-// Functional solution:
-// function ArticleTeaser({ id, title, created_date: createdDate }) {
-//   return (
-//     <div>
-//       <ListGroupItemHeading>
-//         <Link to={`/articles/${id}`}>{title}</Link>
-//       </ListGroupItemHeading>
-//       <ListGroupItemText>{createdDate}</ListGroupItemText>
-//     </div>
-//   );
-// }
