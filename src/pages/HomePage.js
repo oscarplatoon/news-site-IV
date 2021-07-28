@@ -19,6 +19,12 @@ class HomePage extends Component {
   render() {
     return (
       <div>
+        
+        <InputGroup>
+          <Input onChange={(e) => this.handleSearch(e)} type="text" placeholder="Search" />
+        </InputGroup>
+
+
         <ArticleList articles={this.state.articles} />
       </div>
     );
