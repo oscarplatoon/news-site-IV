@@ -1,25 +1,49 @@
 import React, { Component } from 'react';
 import ArticleList from '../components/ArticleList/ArticleList.js'
 import { fetchArticles } from '../api/ArticlesAPI';
+import { InputGroup, Input } from "reactstrap"
+
 
 class HomePage extends Component {
   state = {
-    articles: []
+    articles: [],
+    filterText: ""
   };
 
-  async componentDidMount() {
+  async updateArticles () {
     try {
-      const articlesJson = await fetchArticles();
+      const articlesJson = await fetchArticles(this.state.filterText);
       this.setState({ articles: articlesJson });
     } catch (e) {
       console.error('error fetching articles: ', e);
     }
+
+  }
+
+  async componentDidMount() {
+    this.updateArticles()
+  }
+
+  async componentDidUpdate(prevProps, prevState) {
+
+    // only get the articles list again if our filter has changed
+    if (prevState.filterText != this.state.filterText)
+      this.updateArticles()
+  }
+
+  handleSearch = (e) => {
+    let inputValue = e.target.value
+    console.log(inputValue)
+
+    this.setState({
+      filterText: inputValue
+    })
   }
 
   render() {
     return (
       <div>
-        
+
         <InputGroup>
           <Input onChange={(e) => this.handleSearch(e)} type="text" placeholder="Search" />
         </InputGroup>
